@@ -2,7 +2,29 @@
 # PocketCHIP Builder Script
 # Build 2
 
+BROWSER="dwb"
 REPO="https://raw.githubusercontent.com/SteveMcGrath/chipbuild/master"
+
+# Lets update the PocketCHIP to current first.
+sudo apt-get update 
+
+# Now lets install the software that we want.
+sudo apt-get -y install $BROWSER
+
+
+# If the browser is set to dwb, then we will want to
+# setup the configuration file for dwb.
+if [ "$BROWSER" == "dwb" ];then
+    
+    # If the directory doesn't exist, then lets create it.
+    if [ ! -d "$HOME/.config/dwb" ];then
+        mkdir -p $HOME/.config/dwb
+    fi
+
+    # Next lets go ahead and download the dwb config file
+    # that seems to work well with the PocketCHIP
+    wget -qO ~/.config/dwb/settings $REPO/configs/dwb-settings
+fi
 
 # To keep things nice and clean, we will build out a profile_scripts
 # directory and source these files into the user's prompt.
@@ -34,3 +56,6 @@ if [ ! -f "$HOME/.profile_scripts/aliases.sh" ];then
     echo 'alias sagu="sudo apt-get update"'                     >> $ALIASES
     echo 'alias sags="apt-cache search"'                        >> $ALIASES
 fi
+
+echo ''
+echo '\(^-^)/ Install Completed!  Type "exit" and restart the terminal.'
